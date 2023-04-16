@@ -24,17 +24,32 @@
 	content: "<html> with Markdown"
 }
 ```
+При удалении строки из таблицы она просто заполнится пустыми ячейками
 ## Описание функций класса GoogleShitDB в js и ожидаемый ответ. (В питоне будут похожие)
 ### get_ids()
+Пустые строки excel пропускаются и не попадают в ответ
 ```
 {
-	ids:[1,2,3]
+	ids:[1,3,4]
 }
 ```
-### get_titles()
+### get_all_titles()
 ```
 {
-	titles:["Dozens of grammar", "Frankenstein", "Infinity patterns"]
+	titles:[
+		{
+		 	id:1,
+		 	title:"Dozens of grammar"
+	 	},
+	 	{
+		 	id:2,
+		 	title:"Frankenstein"
+	 	},
+	 	{
+		 	id:3,
+		 	title:"Infinity patterns"
+	 	}
+ 	]
 }
 ```
 ### get(id)
@@ -48,7 +63,8 @@
 ### add(title, content="")
 ```
 {
-	status: true
+	status: true,
+	id: 24
 }
 ```
 ### change_title(id, new_title)
