@@ -1,7 +1,7 @@
 class BaseResponse:
     def __init__(self, success=True, error=None):
-        self.success = success
-        self.error = error
+        self.body = {"success": success,
+                     "error":None if error is None else error.to_dict()}
 
     def to_dict(self):
         return {
@@ -10,5 +10,5 @@ class BaseResponse:
             'Content-Type': 'application/json'
         },
         'isBase64Encoded': False,
-        'body': self.__dict__
+        'body': self.body
     }
