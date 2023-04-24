@@ -46,7 +46,7 @@ def handler(event, context):
             return respond(ErrorResponse("Wrong action"))
     return endpoint(json_obj)
 
-
+# test
 def get_all_titles(json_obj):
     # req = .from_json(json_obj)
     try:
