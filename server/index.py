@@ -44,62 +44,54 @@ def handler(event, context):
             endpoint = delete_post
         case _:
             return respond(ErrorResponse("Wrong action"))
-    return endpoint(json_obj)
+
+    try:
+        resp = endpoint(json)
+    except ApiException as e:
+        resp = respond(ErrorResponse(e.msg))
+
+    return resp
 
 
 def get_all_titles(json_obj):
-    # req = .from_json(json_obj)
-    try:
-        ids = dataRep.get_column_ids()
-        titles = dataRep.get_column_titles()
-        return respond(AllTitlesResponse(ids, titles))
-    except ApiException as e:
-        return respond(ErrorResponse(e.msg))
-    #todo HttpException
+    ids = dataRep.get_column_ids()
+    titles = dataRep.get_column_titles()
+    
+    return respond(AllTitlesResponse(ids, titles))
 
 def get_post(json_obj):
     req = GetPostRequest.from_json(json_obj)
-    try:
-        post = dataRep.get_post_by_id(req.id)
-        return respond(GetPostResponse(post))
-    except ApiException as e:
-        return respond(ErrorResponse(e.msg))
+    post = dataRep.get_post_by_id(req.id)
+
+    return respond(GetPostResponse(post))
 
 def add_new_post(json_obj):
     req = AddPostRequest.from_json(json_obj)
-    try:
-        post_id = dataRep.add_post(req.title, req.content)
-        return respond(AddPostResponse(post_id))
-    except ApiException as e:
-        return respond(ErrorResponse(e.msg))
+    post_id = dataRep.add_post(req.title, req.content)
+
+    return respond(AddPostResponse(post_id))
 
 def change_content(json_obj):
     req = ChangePostRequest.from_json(json_obj)
-    try:
-        post = dataRep.get_post_by_id(req.id)
-        post.content = req.content
-        dataRep.change_post(post)
-        return respond(BaseResponse())
-    except ApiException as e:
-        return respond(ErrorResponse(e.msg))
+    post = dataRep.get_post_by_id(req.id)
+    post.content = req.content
+    dataRep.change_post(post)
+
+    return respond(BaseResponse())
 
 def change_title(json_obj):
     req = ChangePostRequest.from_json(json_obj)
-    try:
-        post = dataRep.get_post_by_id(req.id)
-        post.title = req.title
-        dataRep.change_post(post)
-        return respond(BaseResponse())
-    except ApiException as e:
-        return respond(ErrorResponse(e.msg))
+    post = dataRep.get_post_by_id(req.id)
+    post.title = req.title
+    dataRep.change_post(post)
+
+    return respond(BaseResponse())
 
 def delete_post(json_obj):
     req = GetPostRequest.from_json(json_obj)
-    try:
-        dataRep.delete_post_by_id(req.id)
-        return respond(BaseResponse())
-    except ApiException as e:
-        return respond(ErrorResponse(e.msg))
+    dataRep.delete_post_by_id(req.id)
+    
+    return respond(BaseResponse())
 
 
 #for local tests
