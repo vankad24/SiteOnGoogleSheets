@@ -1,3 +1,51 @@
+
+function build_card(article_id, html_content) {
+	const card = document.createElement("div")
+
+	card.innerHTML = `<div>${html_content}</div><div class="fade"></div><div class="arrow"><img src="icons/arrow_open.svg"></div>`
+	card.onclick = function(event) {
+		open_article(article_id)
+	}
+
+	return card
+}
+
+async function display_front_page() {
+	const article = document.querySelector("article")
+	const cards = document.createElement("div")
+
+	cards.classList.add("cards")
+	article.replaceChildren()
+	article.append(cards)
+
+	const front_page_objs = await fetch_titles()
+
+	for (let obj of front_page_objs) {
+		const card = build_card(obj.id, obj.head)
+
+		cards.append(card)
+	}
+}
+
+async function fetch_titles() {
+	return [
+		{
+			id: 1,
+			head: "<h1>Articles</h1><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
+		}
+	]
+}
+
+async function init_app() {
+	const titles = fetch_titles()
+
+	add_card()
+	add_card()
+	add_card()
+}
+
+display_front_page()
+
 // fetch("https://functions.yandexcloud.net/d4ekq68eemul40pdvpc9", {
 //   "headers": {
 //     "accept": "*/*",
