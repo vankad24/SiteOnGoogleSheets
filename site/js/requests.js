@@ -6,7 +6,25 @@ async function sendRequest(action, params = {}) {
 		body: JSON.stringify({ action, ...params }),
 	};
 
-	return (await fetch(url, requestOptions)).json();
+	let response, obj;
+
+	try {
+		response = await fetch(url, requestOptions);
+	} catch(exception) {
+		console.log("Network error");
+	}
+
+	if (response.status != 200) {
+		console.log("Server error", response);
+	}
+
+	try {
+		obj = await response.json();
+	} catch (exception) {
+		console.log("Malformed JSON from server", exception);
+	}
+
+	return obj;
 }
 
 /*
