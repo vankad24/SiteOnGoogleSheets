@@ -1,3 +1,4 @@
+"use strict"
 
 function build_card(article_id, html_content) {
 	const card = document.createElement("div")
