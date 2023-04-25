@@ -21,7 +21,9 @@ async function display_front_page() {
 	const front_page_objs = await fetch_titles()
 
 	for (let obj of front_page_objs) {
-		const card = build_card(obj.id, obj.head)
+		const id = obj.id
+		const html = parse(obj.head)
+		const card = build_card(id, html)
 
 		cards.append(card)
 	}
@@ -38,15 +40,15 @@ async function fetch_titles() {
 	return [
 		{
 			id: 1,
-			head: "<h1>Articles</h1><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
+			head: "# Articles\nLorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
 		},
 		{
 			id: 2,
-			head: "<h1>Articles</h1><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
+			head: "# Articles\nLorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
 		},
 		{
 			id: 3,
-			head: "<h1>Articles</h1><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
+			head: "# Articles\nLorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
 		},
 	]
 }
