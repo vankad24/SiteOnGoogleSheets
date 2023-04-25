@@ -4,7 +4,7 @@ function build_card(article_id, html_content) {
 
 	card.innerHTML = `<div>${html_content}</div><div class="fade"></div><div class="arrow"><img src="icons/arrow_open.svg"></div>`
 	card.onclick = function(event) {
-		open_article(article_id)
+		display_article(article_id)
 	}
 
 	return card
@@ -27,12 +27,27 @@ async function display_front_page() {
 	}
 }
 
+async function display_article(id) {
+	const article = document.querySelector("article")
+
+	article.replaceChildren()
+	article.innerHTML = `<h1>${id}</h1>`
+}
+
 async function fetch_titles() {
 	return [
 		{
 			id: 1,
 			head: "<h1>Articles</h1><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
-		}
+		},
+		{
+			id: 2,
+			head: "<h1>Articles</h1><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
+		},
+		{
+			id: 3,
+			head: "<h1>Articles</h1><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, impedit quis. Eaque placeat, velit quidem exercitationem vitae illum? Rerum recusandae eligendi quos minima, sed veniam! Nihil earum nemo magni impedit?</p>"
+		},
 	]
 }
 
