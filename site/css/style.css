@@ -53,6 +53,7 @@ img {
 
 .logo {
 	font-size: 20px;
+	cursor: pointer;
 }
 
 .button-strip > label {
