@@ -1,16 +1,15 @@
-function sendRequest(action, params, callback) {
-  const url = 'http://server-url.com';
+async function sendRequest(action, params = {}) {
+	const url = 'apitest/';
 
-  const requestOptions = {
-    method: 'POST',
-    body: JSON.stringify({ action, ...params }),
-  };
+	const requestOptions = {
+		method: 'POST',
+		body: JSON.stringify({ action, ...params }),
+	};
 
-  fetch(url, requestOptions)
-    .then(response => response.json())
-    .then(data => callback(data));
+	return (await fetch(url, requestOptions)).json();
 }
 
+/*
 // get all titles
 sendRequest('get_all_titles', {}, data => console.log(data));
 
@@ -28,3 +27,4 @@ sendRequest('change_content', { id: 1, content: 'New Content' }, data => console
 
 // delete post
 sendRequest('delete_post', { id: 1 }, data => console.log(data));
+*/
