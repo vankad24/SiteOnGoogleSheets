@@ -32,9 +32,10 @@ async function display_front_page() {
 
 async function display_article(id) {
 	const article = document.querySelector("article")
+	const post = await sendRequest("get_post", {id})
 
 	article.replaceChildren()
-	article.innerHTML = `<h1>${id}</h1>`
+	article.innerHTML = parse(post.content)
 }
 
 display_front_page()
