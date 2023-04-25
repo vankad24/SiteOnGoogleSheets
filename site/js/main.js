@@ -36,14 +36,6 @@ async function fetch_titles() {
 	]
 }
 
-async function init_app() {
-	const titles = fetch_titles()
-
-	add_card()
-	add_card()
-	add_card()
-}
-
 display_front_page()
 
 // fetch("https://functions.yandexcloud.net/d4ekq68eemul40pdvpc9", {
