@@ -11,6 +11,30 @@ function build_card(article_id, html_content) {
 	return card
 }
 
+function build_controls_strip() {
+	const strip = document.createElement("div")
+	const info = document.createElement("div")
+
+	const unhide = document.createElement("button")
+	const hide = document.createElement("button")
+	const edit = document.createElement("button")
+	const del = document.createElement("button")
+
+	info.innerHTML = "Управление"
+	unhide.innerHTML = `<img src="icons/visibility.svg"><span>Опубликовать</span>`
+	hide.innerHTML = `<img src="icons/visibility_off.svg"><span>Спрятать</span>`
+	edit.innerHTML = `<img src="icons/edit.svg"><span>Редактировать</span>`
+	del.innerHTML = `<img src="icons/delete.svg"><span>Удалить</span>`
+
+	strip.classList.add("controls")
+	strip.append(info)
+	strip.append(hide)
+	strip.append(edit)
+	strip.append(del)
+
+	return strip
+}
+
 async function display_front_page() {
 	const article = document.querySelector("article")
 	const cards = document.createElement("div")
@@ -34,8 +58,14 @@ async function display_article(id) {
 	const article = document.querySelector("article")
 	const post = await sendRequest("get_post", {id})
 
+	const controls = build_controls_strip()
+	const contents = document.createElement("div")
+
+	contents.innerHTML = parse(post.content)
+
 	article.replaceChildren()
-	article.innerHTML = parse(post.content)
+	article.append(controls)
+	article.append(contents)
 }
 
 display_front_page()
