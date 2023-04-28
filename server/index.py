@@ -11,7 +11,10 @@ import base64
 
 from server.response.GetPostResponse import GetPostResponse
 
-dataRep = DataRopository(SpreadSheet())
+from repository.DataRepository import DataRepository
+from server.data.DataSource import SpreadSheet
+
+dataRep = DataRepository(SpreadSheet())
 
 def json_from_event(event):
     body = event["body"]
@@ -105,3 +108,4 @@ if __name__ == "__main__":
         "body": str(test_body)
     }
     print(handler(test_event, None))
+
