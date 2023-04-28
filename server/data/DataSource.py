@@ -53,7 +53,6 @@ class Secrets:
 
 
 class SpreadSheet:
-
     """ Класс для взаимодействия с google sheet документом """
 
     def __init__(self):
@@ -82,8 +81,10 @@ class Sheet:
 
     """ Класс для взаимодействия с листом в google sheets документе"""
 
-    def __init__(self, inst, name):
-        self.__dict__ = dict(inst.__dict__)
+    def __init__(self, inst: SpreadSheet, name):
+        self.credentials = inst.credentials
+        self.spreadsheet_id = inst.spreadsheet_id
+        self.spreadsheet = inst.spreadsheet
         self.name = name
         self.values = self.spreadsheet.values()
 
@@ -91,7 +92,7 @@ class Sheet:
         if not(list1 and all(i for i in list1)):
             raise ApiException("The list shouldn't be empty and the internal lists too")
 
-    def get_data(self, ranges: list):
+    def __get_data(self, ranges: list):
         """
             Получить данные в пределах нескольких диапазонов (ranges). ranges = 2D array.
             Каждый диапазон записывается в A1 нотации (см в документации api google sheets)
@@ -118,24 +119,7 @@ class Sheet:
                 result += (None, )
         return result
 
-    def append(self, data: list, majorDimension="ROWS"):
-        """
-            Добавляет строку (data) в конец листа
-            data = 2D array
-            majorDimensions = не трогать
-            Возвращает статус операции и доп информацию. Если возникает ошибка, вызывает HttpError
-        """
-
-        body = {
-            "range": self.name,
-            "majorDimension": majorDimension,
-            "values": data
-        }
-
-        response = self.spreadsheet.values().append(spreadsheetId=self.spreadsheet_id, range=self.name, valueInputOption="USER_ENTERED", body=body).execute()
-        return response
-
-    def update(self, data: list, range: str, majorDimension="ROWS"):
+    def __update(self, data: list, range: str, majorDimension="ROWS"):
 
         """
             Обновляет заданный диапазон
@@ -154,7 +138,7 @@ class Sheet:
         response = self.values.update(spreadsheetId=self.spreadsheet_id, range=self.name + "!" + range, valueInputOption="USER_ENTERED", body=body).execute()
         return response
 
-    def clear(self, range: str):
+    def __clear(self, range: str):
 
         """
             Удаляет данные в заданном диапазоне range
@@ -170,52 +154,88 @@ class Sheet:
         response = self.values.clear(spreadsheetId=self.spreadsheet_id, range=self.name + "!" + range, body=body).execute()
         return response
 
+    def append(self, data: list, majorDimension="ROWS"):
+        """
+            Добавляет строку (data) в конец листа
+            data = 2D array
+            majorDimensions = не трогать
+            Возвращает статус операции и доп информацию. Если возникает ошибка, вызывает HttpError
+        """
+
+        body = {
+            "range": self.name,
+            "majorDimension": majorDimension,
+            "values": data
+        }
+
+        response = self.spreadsheet.values().append(spreadsheetId=self.spreadsheet_id, range=self.name, valueInputOption="USER_ENTERED", body=body).execute()
+        updated_cell = response['updates']['updatedRange'].split(":")[-1]
+        start = 0
+        while not updated_cell[start].isdigit():
+            start+=1
+        new_id = int(updated_cell[start:])
+        return new_id
+
     def get_row_by_id(self, id: int):
         """ Получение данных по строке, имеющей порядковый номер = id. None, если строка пуста"""
         row = str(id)
-        response = self.get_data([[row + ":" + row]])[0]
+        response = self.__get_data([[row + ":" + row]])[0]
         if response is None:
             return None
         return response[0]
 
     def get_cell_by_id(self, id: int, column: str):
-
         """ Получение ячейки по ее порядковому номеру и названию столбца. None, если ячейка пуста """
-
         row = str(id)
-        response = self.get_data([[column.upper() + row]])[0]
+        response = self.__get_data([[column.upper() + row]])[0]
         if response is None:
-            return response
-        return response[0]
+            return None
+        return response[0][0]
 
     def get_column(self, column: str):
-        """ Получение данных в столбце по его названию. None, если столбец пуст """
+        """ Получение данных в столбце по его названию. None, если столбец пуст. Пустые ячейки заполнит None """
         col = column.upper()
-        return self.get_data([[col + ":" + col]])[0]
+        # return self.__get_data([[col + ":" + col]])[0]
+        return list(map(lambda x: x[0] if x else None, self.__get_data([[col + ":" + col]])[0]))
 
-    def add_row(self, title: str, content=""):
-        """ Добавление строки title, content в конец таблицы. Если title = "", вызывает ApiException """
-
-        if not title:
-            raise ApiException("The title should be specified")
-
-        data = [[title, content]]
-        response = self.append(data)
-        # return response
-
-    def change_row(self, post):
-        """ Обновление поста в таблице """
-        post = post.to_dict()
-        data = [[post["title"], post["content"]]]
-        id = str(post["id"])
-        response = self.update(data, id + ":" + id)
+    def update_row(self, id, *row):
+        """Обновление строки в таблице """
+        data = [row]
+        id = str(id)
+        response = self.__update(data, id + ":" + id)
         # return response
 
     def delete_row(self, id):
         """ Удаление строки в таблице по ее порядковому номеру """
         id1 = str(id)
-        response = self.clear(id1 + ":" + id1)
+        response = self.__clear(id1 + ":" + id1)
         # return response
 
-    def read(self):
-        print(f"Will read sheet {self.name} using credentials {self.credentials}")
+def main():
+    """ Shows the basic usage of the Sheets API. """
+
+    db = SpreadSheet()
+    # print(json.dumps(db.get_spreadsheet_info(["Sheet1!A5", "Sheet2!A3"], True), indent=4))
+
+    sh1 = db.open_sheet("Sheet1")
+
+    print(sh1.get_cell_by_id(7, "a"))
+    print(sh1.get_column("a"))
+    print(sh1.get_column("b"))
+    print(sh1.get_row_by_id(7))
+    print(sh1.append([["hi","24"]]))
+    # sh1.delete_row(7)
+    # print(sh1.get_row_by_id(7))
+
+    # sh1.add_row("hello", "hi")
+    # sh1.add_row("one more", "row")
+    # sh1.add_row(12, 24)
+    # p = Post(14, "test", "bug")
+    # p1 = Post(15, "empty", "row")
+
+    # sh1.change_row(p)
+    # sh1.change_row(p1)
+    # sh1.add_row("one more", "test")
+
+if __name__ == '__main__':
+    main()

@@ -1,4 +1,5 @@
 # Сайт на гугл таблицах
+- Run `pip install -r requirements.txt` to download all necessary python libs
 
 ## План действий
 - Изучить api google sheets, на питоне сделать удобные функции записи, чтения в таблицу

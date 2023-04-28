@@ -1,5 +1,5 @@
 async function sendRequest(action, params = {}) {
-	const url = 'apitest/';
+	const url = 'https://functions.yandexcloud.net/d4e6j4uk5pp88r9ekg4r';
 
 	const requestOptions = {
 		method: 'POST',
