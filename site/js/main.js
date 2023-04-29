@@ -1,7 +1,8 @@
 "use strict"
 
-// Три элемента с изменяемым содержимым
+// Элементы с изменяемым содержимым/атрибутами
 const app = {
+	main: document.querySelector("main"),
 	front: document.querySelector(".front"),
 	editor: document.querySelector(".editor"),
 	article: document.querySelector(".article")
@@ -21,6 +22,7 @@ async function display_front_page() {
 		app.front.append(card)
 	}
 
+	app.main.classList.remove("two-panel")
 	app.front.classList.remove("hide")
 	app.editor.classList.add("hide")
 	app.article.classList.add("hide")
@@ -28,24 +30,49 @@ async function display_front_page() {
 
 // Отобразить публикацию
 async function display_article(id) {
-	const controls = build_controls_strip()
-	const contents = document.createElement("div")
 	const post = await sendRequest("get_post", {id})
+	const controls = build_post_control_panel(post)
+	const contents = document.createElement("div")
 
 	contents.innerHTML = parse(post.content)
 
 	app.article.replaceChildren(controls, contents)
 
+	app.main.classList.remove("two-panel")
 	app.front.classList.add("hide")
 	app.editor.classList.add("hide")
 	app.article.classList.remove("hide")
 }
 
 // Отобразить редактор
-async function display_editor() {
+async function display_editor(id) {
+	const post = await sendRequest("get_post", {id})
+	const controls = build_editor_control_panel(post)
+	const textarea = document.createElement("textarea")
+	const preview = build_preview_hint_panel()
+	const parsed = document.createElement("div")
 
+	textarea.value = post.content
+	parsed.innerHTML = parse(post.content)
+
+	textarea.oninput = function(event) {
+		parsed.innerHTML = parse(textarea.value)
+	}
+
+	app.editor.replaceChildren(controls, textarea)
+	app.article.replaceChildren(preview, parsed)
+
+	app.main.classList.add("two-panel")
+	app.front.classList.add("hide")
+	app.editor.classList.remove("hide")
+	app.article.classList.remove("hide")
 }
 
+// ============================================================================
+// Функции для генерации элементов
+// ============================================================================
+
+// Карточка для главной страницы
 function build_card(article_id, html_content) {
 	const card = document.createElement("div")
 
@@ -57,7 +84,8 @@ function build_card(article_id, html_content) {
 	return card
 }
 
-function build_controls_strip() {
+// Панель с кнопками публикации/скрытия + редактирования + удаления
+function build_post_control_panel(post) {
 	const strip = document.createElement("div")
 	const info = document.createElement("div")
 
@@ -65,6 +93,27 @@ function build_controls_strip() {
 	const hide = document.createElement("button")
 	const edit = document.createElement("button")
 	const del = document.createElement("button")
+
+	unhide.onlick = function() {
+		unhide_article(post.id)
+		display_article(post.id) // Спровоцировать обновление панели управления
+	}
+
+	hide.onlick = function() {
+		hide_article(post.id)
+		display_article(post.id)
+	}
+
+	edit.onclick = function() {
+		display_editor(post.id)
+	}
+
+	del.onclick = function() {
+		if (!confirm("Точно удалить?")) return
+
+		delete_article(post.id)
+		display_front_page();
+	}
 
 	info.innerHTML = "Управление"
 	unhide.innerHTML = `<img src="icons/visibility.svg"><span>Опубликовать</span>`
@@ -77,6 +126,47 @@ function build_controls_strip() {
 	strip.append(hide)
 	strip.append(edit)
 	strip.append(del)
+
+	return strip
+}
+
+// Панель с кнопками отмены + сохранения
+function build_editor_control_panel(post) {
+	const strip = document.createElement("div")
+	const info = document.createElement("div")
+
+	const abort = document.createElement("button")
+	const save = document.createElement("button")
+
+	abort.onclick = function() {
+		display_article(post.id)
+	}
+
+	save.onclick = function() {
+		update_article(post.id, editor.children[1].value)
+	}
+
+	info.innerHTML = "Режим редактирования"
+	abort.innerHTML = `<img src="icons/close.svg"><span>Отмена</span>`
+	save.innerHTML = `<img src="icons/done.svg"><span>Сохранить</span>`
+
+	strip.classList.add("controls")
+	strip.append(info)
+	strip.append(abort)
+	strip.append(save)
+
+	return strip
+}
+
+// Панель с надписью "Предпросмотр"
+function build_preview_hint_panel() {
+	const strip = document.createElement("div")
+	const info = document.createElement("div")
+
+	info.innerHTML = "Предпросмотр"
+
+	strip.classList.add("controls")
+	strip.append(info)
 
 	return strip
 }
