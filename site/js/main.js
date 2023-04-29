@@ -1,5 +1,51 @@
 "use strict"
 
+// Три элемента с изменяемым содержимым
+const app = {
+	front: document.querySelector(".front"),
+	editor: document.querySelector(".editor"),
+	article: document.querySelector(".article")
+}
+
+// Отобразить главную страницу
+async function display_front_page() {
+	const front_page_objs = await sendRequest("get_all_titles")
+
+	app.front.replaceChildren()
+
+	for (let obj of front_page_objs) {
+		const id = obj.id
+		const html = parse(obj.head)
+		const card = build_card(id, html)
+
+		app.front.append(card)
+	}
+
+	app.front.classList.remove("hide")
+	app.editor.classList.add("hide")
+	app.article.classList.add("hide")
+}
+
+// Отобразить публикацию
+async function display_article(id) {
+	const controls = build_controls_strip()
+	const contents = document.createElement("div")
+	const post = await sendRequest("get_post", {id})
+
+	contents.innerHTML = parse(post.content)
+
+	app.article.replaceChildren(controls, contents)
+
+	app.front.classList.add("hide")
+	app.editor.classList.add("hide")
+	app.article.classList.remove("hide")
+}
+
+// Отобразить редактор
+async function display_editor() {
+
+}
+
 function build_card(article_id, html_content) {
 	const card = document.createElement("div")
 
@@ -33,39 +79,6 @@ function build_controls_strip() {
 	strip.append(del)
 
 	return strip
-}
-
-async function display_front_page() {
-	const article = document.querySelector("article")
-	const cards = document.createElement("div")
-
-	cards.classList.add("cards")
-	article.replaceChildren()
-	article.append(cards)
-
-	const front_page_objs = await sendRequest("get_all_titles")
-
-	for (let obj of front_page_objs) {
-		const id = obj.id
-		const html = parse(obj.head)
-		const card = build_card(id, html)
-
-		cards.append(card)
-	}
-}
-
-async function display_article(id) {
-	const article = document.querySelector("article")
-	const post = await sendRequest("get_post", {id})
-
-	const controls = build_controls_strip()
-	const contents = document.createElement("div")
-
-	contents.innerHTML = parse(post.content)
-
-	article.replaceChildren()
-	article.append(controls)
-	article.append(contents)
 }
 
 display_front_page()
