@@ -5,11 +5,14 @@ const app = {
 	main: document.querySelector("main"),
 	front: document.querySelector(".front"),
 	editor: document.querySelector(".editor"),
-	article: document.querySelector(".article")
+	article: document.querySelector(".article"),
+	loading_screen: document.querySelector(".loading_screen")
 }
 
 // Отобразить главную страницу
 async function display_front_page() {
+	display_loading_screen()
+
 	const { titles } = await sendRequest("get_all_titles")
 
 	app.front.replaceChildren()
@@ -28,10 +31,13 @@ async function display_front_page() {
 	app.front.classList.remove("hide")
 	app.editor.classList.add("hide")
 	app.article.classList.add("hide")
+	app.loading_screen.classList.add("hide")
 }
 
 // Отобразить публикацию
 async function display_article(id) {
+	display_loading_screen()
+
 	const { post } = await sendRequest("get_post", {id})
 	const controls = build_post_control_panel(post)
 	const contents = document.createElement("div")
@@ -44,10 +50,13 @@ async function display_article(id) {
 	app.front.classList.add("hide")
 	app.editor.classList.add("hide")
 	app.article.classList.remove("hide")
+	app.loading_screen.classList.add("hide")
 }
 
 // Отобразить редактор
 async function display_editor(id) {
+	display_loading_screen()
+
 	const { post } = await sendRequest("get_post", {id})
 	const controls = build_editor_control_panel(post)
 	const textarea = document.createElement("textarea")
@@ -68,6 +77,15 @@ async function display_editor(id) {
 	app.front.classList.add("hide")
 	app.editor.classList.remove("hide")
 	app.article.classList.remove("hide")
+	app.loading_screen.classList.add("hide")
+}
+
+async function display_loading_screen() {
+	app.main.classList.remove("two-panel")
+	app.front.classList.add("hide")
+	app.editor.classList.add("hide")
+	app.article.classList.add("hide")
+	app.loading_screen.classList.remove("hide")
 }
 
 // ============================================================================
