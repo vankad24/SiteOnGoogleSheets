@@ -22,6 +22,8 @@ async function display_front_page() {
 		app.front.append(card)
 	}
 
+	app.front.append(build_new_post_card())
+
 	app.main.classList.remove("two-panel")
 	app.front.classList.remove("hide")
 	app.editor.classList.add("hide")
@@ -80,6 +82,21 @@ function build_card(article_id, html_content) {
 	card.onclick = function(event) {
 		display_article(article_id)
 	}
+
+	return card
+}
+
+// Карточка для создания нового поста
+function build_new_post_card() {
+	const card = document.createElement("div")
+
+	card.innerHTML = `<div><img src="icons/add.svg"><div>Добавить</div></div>`
+	card.onclick = async function(event) {
+		const { id } = await sendRequest('add_new_post', {title: "New post"})
+		display_editor(id)
+	}
+
+	card.classList.add("add-card")
 
 	return card
 }
