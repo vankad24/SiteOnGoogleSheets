@@ -10,13 +10,13 @@ const app = {
 
 // Отобразить главную страницу
 async function display_front_page() {
-	const front_page_objs = await sendRequest("get_all_titles")
+	const { titles } = await sendRequest("get_all_titles")
 
 	app.front.replaceChildren()
 
-	for (let obj of front_page_objs) {
+	for (let obj of titles) {
 		const id = obj.id
-		const html = parse(obj.head)
+		const html = parse(obj.head ?? `<h1>${obj.title}</h1>`)
 		const card = build_card(id, html)
 
 		app.front.append(card)
@@ -30,7 +30,7 @@ async function display_front_page() {
 
 // Отобразить публикацию
 async function display_article(id) {
-	const post = await sendRequest("get_post", {id})
+	const { post } = await sendRequest("get_post", {id})
 	const controls = build_post_control_panel(post)
 	const contents = document.createElement("div")
 
@@ -46,7 +46,7 @@ async function display_article(id) {
 
 // Отобразить редактор
 async function display_editor(id) {
-	const post = await sendRequest("get_post", {id})
+	const { post } = await sendRequest("get_post", {id})
 	const controls = build_editor_control_panel(post)
 	const textarea = document.createElement("textarea")
 	const preview = build_preview_hint_panel()
