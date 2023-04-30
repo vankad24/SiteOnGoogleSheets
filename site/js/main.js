@@ -142,8 +142,13 @@ function build_editor_control_panel(post) {
 		display_article(post.id)
 	}
 
-	save.onclick = function() {
-		update_article(post.id, editor.children[1].value)
+	save.onclick = async function() {
+		const content = app.editor.children[1].value
+		const id = post.id
+
+		const response = await sendRequest('change_content', { id, content } )
+
+		display_article(post.id)
 	}
 
 	info.innerHTML = "Режим редактирования"
