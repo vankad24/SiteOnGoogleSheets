@@ -78,12 +78,6 @@ main > div {
 	grid-column: span 2;
 }
 
-@media (min-width: 48rem) {
-	.two-panel > div {
-		grid-column: unset;
-	}
-}
-
 /* ==================== */
 /* Навигационная панель */
 /* ==================== */
@@ -262,6 +256,24 @@ main > div {
 	vertical-align: middle;
 }
 
+/* ============= */
+/* Прочая логика */
+/* ============= */
+
 .hide {
 	display: none;
+}
+
+.two-panel > .article {
+	display: none;
+}
+
+@media (min-width: 48rem) {
+	.two-panel > div {
+		grid-column: unset;
+	}
+
+	.two-panel > .article {
+		display: unset;
+	}
 }
