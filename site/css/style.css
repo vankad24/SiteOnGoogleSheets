@@ -235,14 +235,14 @@ main > div {
 /* Загрузочный экран */
 /* ================= */
 
-.loading_screen > img {
-	display: block;
-	width: 3rem;
-	margin: 40% auto 1rem;
+.loading_screen {
+	display: grid;
+	place-items: center;
+	text-align: center;
 }
 
-.loading_screen > div {
-	text-align: center;
+.loading_screen > div > img {
+	width: 3rem;
 }
 
 /* =============================== */
