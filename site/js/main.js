@@ -108,11 +108,13 @@ function build_post_control_panel(post) {
 		display_editor(post.id)
 	}
 
-	del.onclick = function() {
-		if (!confirm("Точно удалить?")) return
+	del.onclick = async function() {
+		const id = post.id
 
-		delete_article(post.id)
-		display_front_page();
+		if (confirm("Точно удалить?")) {
+			const response = await sendRequest('delete_post', { id } )
+			display_front_page()
+		}
 	}
 
 	info.innerHTML = "Управление"
