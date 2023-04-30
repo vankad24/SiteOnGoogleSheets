@@ -51,7 +51,6 @@ textarea {
 	resize: none;
 
 	padding: .25rem;
-	margin-top: 1rem;
 }
 
 textarea:focus {
@@ -216,6 +215,16 @@ main > div {
 	right: 1.5rem;
 }
 
+/* ======== */
+/* Редактор */
+/* ======== */
+
+.editor, .article {
+	display: grid;
+	grid-template-rows: auto 1fr;
+	gap: 1rem;
+}
+
 /* =============================== */
 /* Элементы управления публикацией */
 /* =============================== */
@@ -227,6 +236,7 @@ main > div {
 	grid-template-columns: 1fr;
 	grid-auto-flow: column;
 	padding: .5rem;
+	height: 3rem;
 }
 
 .controls div {
@@ -274,6 +284,6 @@ main > div {
 	}
 
 	.two-panel > .article {
-		display: unset;
+		display: grid;
 	}
 }
