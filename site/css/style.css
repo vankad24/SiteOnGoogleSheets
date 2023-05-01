@@ -302,7 +302,7 @@ main > div {
 	display: none;
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 60rem) {
 	.two-panel > div {
 		grid-column: unset;
 	}
