@@ -270,6 +270,10 @@ main > div {
 	.controls .label {
 		display: none;
 	}
+
+	.controls .elems {
+		place-self: center center;
+	}
 }
 
 .controls button {
