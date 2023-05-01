@@ -253,23 +253,27 @@ main > div {
 	border: 3px dashed orange;
 	display: grid;
 
-	grid-template-columns: 1fr;
 	grid-auto-flow: column;
 	padding: .5rem;
 	min-height: 3rem;
 }
 
-.controls div {
-	margin: auto 0rem;
+.controls .label {
+	place-self: center start;
+}
+
+.controls .elems {
+	place-self: center end;
 }
 
 @media (max-width: 34rem) {
-	.controls div {
+	.controls .label {
 		display: none;
 	}
 }
 
 .controls button {
+	display: inline;
 	background: none;
 	border: none;
 	padding: 0rem .5rem;

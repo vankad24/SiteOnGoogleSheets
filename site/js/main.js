@@ -119,11 +119,29 @@ function build_new_post_card() {
 	return card
 }
 
+// Панель с подписью и кнопками
+function build_panel(_label, _elems = []) {
+	const panel = document.createElement("div")
+	const label = document.createElement("div")
+	const elems = document.createElement("div")
+
+	panel.classList.add("controls")
+	label.classList.add("label")
+	elems.classList.add("elems")
+
+	label.innerHTML = _label
+	
+	for (let elem of _elems)
+		elems.append(elem)
+
+	panel.append(label)
+	panel.append(elems)
+
+	return panel
+}
+
 // Панель с кнопками публикации/скрытия + редактирования + удаления
 function build_post_control_panel(post) {
-	const strip = document.createElement("div")
-	const info = document.createElement("div")
-
 	const unhide = document.createElement("button")
 	const hide = document.createElement("button")
 	const edit = document.createElement("button")
@@ -152,26 +170,16 @@ function build_post_control_panel(post) {
 		}
 	}
 
-	info.innerHTML = "Управление"
 	unhide.innerHTML = `<img src="icons/visibility.svg"><span>Опубликовать</span>`
 	hide.innerHTML = `<img src="icons/visibility_off.svg"><span>Спрятать</span>`
 	edit.innerHTML = `<img src="icons/edit.svg"><span>Редактировать</span>`
 	del.innerHTML = `<img src="icons/delete.svg"><span>Удалить</span>`
 
-	strip.classList.add("controls")
-	strip.append(info)
-	strip.append(hide)
-	strip.append(edit)
-	strip.append(del)
-
-	return strip
+	return build_panel("Управление", [hide, edit, del])
 }
 
 // Панель с кнопками отмены + сохранения
 function build_editor_control_panel(post) {
-	const strip = document.createElement("div")
-	const info = document.createElement("div")
-
 	const abort = document.createElement("button")
 	const save = document.createElement("button")
 
@@ -188,29 +196,15 @@ function build_editor_control_panel(post) {
 		display_article(post.id)
 	}
 
-	info.innerHTML = "Режим редактирования"
 	abort.innerHTML = `<img src="icons/close.svg"><span>Отмена</span>`
 	save.innerHTML = `<img src="icons/done.svg"><span>Сохранить</span>`
 
-	strip.classList.add("controls")
-	strip.append(info)
-	strip.append(abort)
-	strip.append(save)
-
-	return strip
+	return build_panel("Режим редактирования", [abort, save])
 }
 
 // Панель с надписью "Предпросмотр"
 function build_preview_hint_panel() {
-	const strip = document.createElement("div")
-	const info = document.createElement("div")
-
-	info.innerHTML = "Предпросмотр"
-
-	strip.classList.add("controls")
-	strip.append(info)
-
-	return strip
+	return build_panel("Предпросмотр")
 }
 
 display_front_page()
