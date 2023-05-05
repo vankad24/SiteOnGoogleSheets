@@ -38,8 +38,8 @@ class Secrets:
                     self.CREDENTIALS_FILE, self.SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
-            with open(self.TOKEN_FILE, 'w') as token:
-                token.write(creds.to_json())
+            # with open(self.TOKEN_FILE, 'w') as token:
+            #     token.write(creds.to_json())
 
         self.credentials = creds
 
@@ -223,7 +223,7 @@ def main():
     print(sh1.get_column("a"))
     print(sh1.get_column("b"))
     print(sh1.get_row_by_id(7))
-    print(sh1.append([["hi","24"]]))
+    print(sh1.append([["hi",25]]))
     # sh1.delete_row(7)
     # print(sh1.get_row_by_id(7))
 

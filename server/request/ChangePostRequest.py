@@ -1,5 +1,6 @@
 class ChangePostRequest:
-    def __init__(self, pid, title, content):
+    def __init__(self, pid, title, content,token):
+        self.token = token
         self.content = content
         self.title = title
         self.id = pid
@@ -10,4 +11,5 @@ class ChangePostRequest:
             json.get("id", -1),
             json.get("title", ""),
             json.get("content", ""),
+            json.get("token", "")
         )

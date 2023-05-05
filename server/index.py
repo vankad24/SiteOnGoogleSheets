@@ -6,18 +6,23 @@ from googleapiclient.errors import HttpError
 from server.repository.PostRepository import PostRepository
 from server.data.DataSource import SpreadSheet
 from server.model.ApiException import ApiException
+from server.repository.UserRepository import UserRepository
 from server.request.AddPostRequest import AddPostRequest
 from server.request.ChangePostRequest import ChangePostRequest
 from server.request.GetPostRequest import GetPostRequest
+from server.request.LoginRequest import LoginRequest
+from server.request.GetUserRequest import GetUserRequest
 from server.response.AddPostResponse import AddPostResponse
 from server.response.AllTitlesResponse import AllTitlesResponse
 from server.response.BaseResponse import BaseResponse
 from server.response.ErrorResponse import ErrorResponse
 from server.response.GetPostResponse import GetPostResponse
+from server.response.LoginResponse import LoginResponse
+from server.response.GetUserResponse import GetUserResponse
 
 dataSource = SpreadSheet()
 postRep = PostRepository(dataSource.open_sheet("Posts"))
-# userRep = UserRepository(dataSource.open_sheet("Users"))
+userRep = UserRepository(dataSource.open_sheet("Users"))
 
 def json_from_event(event):
     body = event["body"]
@@ -52,6 +57,10 @@ def handler(event, context):
             endpoint = change_content
         case "delete_post":
             endpoint = delete_post
+        case "login":
+            endpoint = login
+        case "get_user_by_id":
+            endpoint = get_user_by_id
         case _:
             return respond(ErrorResponse("Wrong action"))
 
@@ -66,7 +75,8 @@ def handler(event, context):
 
 def get_all_titles(json_obj):
     titles = postRep.get_column_titles()
-    return AllTitlesResponse(titles)
+    heads = postRep.get_column_heads()
+    return AllTitlesResponse(titles, heads)
 
 def get_post(json_obj):
     req = GetPostRequest.from_json(json_obj)
@@ -75,36 +85,53 @@ def get_post(json_obj):
 
 def add_new_post(json_obj):
     req = AddPostRequest.from_json(json_obj)
-    post_id = postRep.add_post(req.title, req.content)
+    user = userRep.get_user_by_token(req.token)
+    post_id = postRep.add_post(user.uid, req.title, req.content)
     return AddPostResponse(post_id)
 
 def change_content(json_obj):
     req = ChangePostRequest.from_json(json_obj)
+    user = userRep.get_user_by_token(req.token)
     post = postRep.get_post_by_id(req.id)
     post.content = req.content
-    postRep.change_post(post)
+    postRep.change_post(post, user.uid)
     return BaseResponse()
 
 def change_title(json_obj):
     req = ChangePostRequest.from_json(json_obj)
+    user = userRep.get_user_by_token(req.token)
     post = postRep.get_post_by_id(req.id)
     post.title = req.title
-    postRep.change_post(post)
+    postRep.change_post(post, user.uid)
     return BaseResponse()
 
 def delete_post(json_obj):
     req = GetPostRequest.from_json(json_obj)
-    postRep.delete_post_by_id(req.id)
+    user = userRep.get_user_by_token(req.token)
+    postRep.delete_post_by_id(req.id, user.uid)
     return BaseResponse()
+
+def login(json_obj):
+    req = LoginRequest.from_json(json_obj)
+    user = userRep.login(req.name, req.password)
+    return LoginResponse(user)
+
+def get_user_by_id(json_obj):
+    req = GetUserRequest.from_json(json_obj)
+    user = userRep.get_user_by_id(req.id)
+    return GetUserResponse(user)
 
 
 #for local tests
 if __name__ == "__main__":
     test_body = {
-        "action":"change_content",
-        "id":5,
-        "title":"New title",
-        "content": "New content"
+        "action":"login",
+        "name":"vanka",
+        "password":"242424",
+        "token":"24242424242424",
+        "id":9,
+        "title":"Short title",
+        "content": "Short content"
     }
     test_event = {
         "isBase64Encoded": False,

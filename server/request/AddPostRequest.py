@@ -1,5 +1,6 @@
 class AddPostRequest:
-    def __init__(self, title, content):
+    def __init__(self, title, content, token):
+        self.token = token
         self.content = content
         self.title = title
 
@@ -8,4 +9,5 @@ class AddPostRequest:
         return AddPostRequest(
             json.get("title", ""),
             json.get("content", ""),
+            json.get("token", "")
         )
