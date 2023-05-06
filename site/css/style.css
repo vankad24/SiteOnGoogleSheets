@@ -38,25 +38,21 @@ nav {
 
 main {
 	display: grid;
+	grid-auto-flow: column;
+	place-content: start center;
 
-	grid-template-columns: 1fr 1fr;
 	gap: 1rem;
-
-	max-width: 97rem; /* 48rem + 1rem + 48rem */
-	margin: auto;
 }
 
 main > div {
-	min-height: 100vh;
 	max-width: 48rem;
-	width: 100%;
+	width: 100vw;
+	height: 100vh;
 
 	padding: 1rem;
 	margin: 0 auto;
 
 	background-color: gainsboro;
-
-	grid-column: span 2;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -158,20 +154,20 @@ h1, h2, h3, h4, h5, h6 {
 	display: grid;
 	grid-template-columns: repeat(3, 14.666rem);
 	grid-auto-rows: 14.666rem;
+
+	place-content: start center;
 	gap: 1rem;
 }
 
 @media (max-width: 48rem) {
 	.front {
 		grid-template-columns: repeat(2, 14.666rem);
-		width: 30.333rem;
 	}
 }
 
 @media (max-width: 32.333rem) {
 	.front {
 		grid-template-columns: 1fr;
-		width: 100%;
 	}
 }
 
@@ -319,11 +315,7 @@ h1, h2, h3, h4, h5, h6 {
 	display: none;
 }
 
-@media (min-width: 60rem) {
-	.two-panel > div {
-		grid-column: unset;
-	}
-
+@media (min-width: 97rem) {
 	.two-panel > .article {
 		display: grid;
 	}
