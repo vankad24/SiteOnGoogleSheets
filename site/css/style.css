@@ -41,6 +41,9 @@ main {
 
 	grid-template-columns: 1fr 1fr;
 	gap: 1rem;
+
+	max-width: 97rem; /* 48rem + 1rem + 48rem */
+	margin: auto;
 }
 
 main > div {
