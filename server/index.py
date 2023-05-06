@@ -125,7 +125,7 @@ def get_user_by_id(json_obj):
 #for local tests
 if __name__ == "__main__":
     test_body = {
-        "action":"login",
+        "action":"get_all_titles",
         "name":"vanka",
         "password":"242424",
         "token":"24242424242424",
