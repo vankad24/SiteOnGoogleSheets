@@ -39,11 +39,16 @@ async function display_article(id) {
 
 	const { post } = await sendRequest("get_post", {id})
 	const controls = build_post_control_panel(post)
-	const contents = document.createElement("div")
+	const article = document.createElement("div")
+	const title = document.createElement("h1")
+	const content = document.createElement("div")
 
-	contents.innerHTML = marked.parse(post.content)
+	title.innerHTML = post.title
+	content.innerHTML = marked.parse(post.content)
 
-	app.article.replaceChildren(controls, contents)
+	article.append(title, content)
+
+	app.article.replaceChildren(controls, article)
 
 	app.main.classList.remove("two-panel")
 	app.front.classList.add("hide")
