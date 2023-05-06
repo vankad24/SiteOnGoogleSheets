@@ -41,7 +41,7 @@ async function display_article(id) {
 	const controls = build_post_control_panel(post)
 	const contents = document.createElement("div")
 
-	contents.innerHTML = parse(post.content)
+	contents.innerHTML = marked.parse(post.content)
 
 	app.article.replaceChildren(controls, contents)
 
@@ -63,10 +63,10 @@ async function display_editor(id) {
 	const parsed = document.createElement("div")
 
 	textarea.value = post.content
-	parsed.innerHTML = parse(post.content)
+	parsed.innerHTML = marked.parse(post.content)
 
 	textarea.oninput = function(event) {
-		parsed.innerHTML = parse(textarea.value)
+		parsed.innerHTML = marked.parse(textarea.value)
 	}
 
 	app.editor.replaceChildren(controls, textarea)
@@ -94,7 +94,7 @@ async function display_loading_screen() {
 // Карточка для главной страницы
 function build_card(id, title, head) {
 	const card = document.createElement("div")
-	const html_head = parse(head ?? "")
+	const html_head = marked.parse(head ?? "")
 
 	card.innerHTML = `<div><h1>${title}</h1><div>${html_head}</div></div><div class="fade"></div><div class="arrow"><img src="icons/arrow_open.svg"></div>`
 	card.onclick = function(event) {
