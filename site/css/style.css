@@ -17,12 +17,6 @@ input, button, textarea {
 	display: block;
 }
 
-input {
-	width: 100%;
-	height: 2rem;
-	margin: .5rem 0rem;
-}
-
 button {
 	padding: .25rem 1rem;
 }
@@ -40,23 +34,6 @@ nav {
 	height: 2rem;
 
 	background-color: gainsboro;
-}
-
-textarea {
-	width: 100%;
-	height: 100%;
-
-	background-color: inherit;
-	border: 3px dashed gray;
-	outline: none;
-
-	resize: none;
-
-	padding: .25rem;
-}
-
-textarea:focus {
-	border: 3px dashed orangered;
 }
 
 main {
@@ -77,6 +54,10 @@ main > div {
 	background-color: gainsboro;
 
 	grid-column: span 2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: .5rem 0rem;
 }
 
 /* ==================== */
@@ -230,8 +211,34 @@ main > div {
 .editor, .article {
 	display: grid;
 	grid-auto-columns: 100%;
-	grid-template-rows: auto 1fr;
+	grid-template-rows: auto auto 1fr;
 	gap: 1rem;
+}
+
+.editor textarea, .editor input[type="text"] {
+	background-color: inherit;
+	border: 3px dashed gray;
+	outline: none;
+}
+
+.editor input[type="text"] {
+	font-size: 200%;
+	font-weight: bold;
+	padding: .5rem;
+}
+
+.editor textarea {
+	width: 100%;
+	height: 100%;
+
+	resize: none;
+
+	padding: .25rem;
+	margin: 0em;
+}
+
+.editor textarea:focus, .editor input[type="text"]:focus {
+	border: 3px dashed orangered;
 }
 
 /* ================= */

@@ -57,20 +57,51 @@ async function display_editor(id) {
 	display_loading_screen()
 
 	const { post } = await sendRequest("get_post", {id})
-	const controls = build_editor_control_panel(post)
+	const titlebox = document.createElement("input")
 	const textarea = document.createElement("textarea")
-	const preview = build_preview_hint_panel()
-	const parsed = document.createElement("div")
+	const preview_label = build_preview_hint_panel()
+	const preview = document.createElement("div")
+	const title = document.createElement("h1")
+	const content = document.createElement("div")
 
+	titlebox.type = "text"
+	titlebox.value = post.title
 	textarea.value = post.content
-	parsed.innerHTML = marked.parse(post.content)
+	title.innerHTML = post.title
+	content.innerHTML = marked.parse(post.content)
 
-	textarea.oninput = function(event) {
-		parsed.innerHTML = marked.parse(textarea.value)
+	preview.append(title, content)
+
+	titlebox.oninput = function(event) {
+		title.innerHTML = titlebox.value
 	}
 
-	app.editor.replaceChildren(controls, textarea)
-	app.article.replaceChildren(preview, parsed)
+	textarea.oninput = function(event) {
+		content.innerHTML = marked.parse(textarea.value)
+	}
+
+	const save_fn = async function() {
+		const content = textarea.value
+		const title = titlebox.value
+		const id = post.id
+
+		display_loading_screen()
+
+		if (title != post.title) {
+			const response = await sendRequest('change_title', { id, title } )
+		}
+
+		if (content != post.content) {
+			const response = await sendRequest('change_content', { id, content } )
+		}
+
+		display_article(id)
+	}
+
+	const controls = build_editor_control_panel(post, save_fn)
+
+	app.editor.replaceChildren(controls, titlebox, textarea)
+	app.article.replaceChildren(preview_label, preview)
 
 	app.main.classList.add("two-panel")
 	app.front.classList.add("hide")
@@ -179,7 +210,7 @@ function build_post_control_panel(post) {
 }
 
 // Панель с кнопками отмены + сохранения
-function build_editor_control_panel(post) {
+function build_editor_control_panel(post, save_fn) {
 	const abort = document.createElement("button")
 	const save = document.createElement("button")
 
@@ -187,14 +218,7 @@ function build_editor_control_panel(post) {
 		display_article(post.id)
 	}
 
-	save.onclick = async function() {
-		const content = app.editor.children[1].value
-		const id = post.id
-
-		const response = await sendRequest('change_content', { id, content } )
-
-		display_article(post.id)
-	}
+	save.onclick = save_fn
 
 	abort.innerHTML = `<img src="icons/close.svg"><span>Отмена</span>`
 	save.innerHTML = `<img src="icons/done.svg"><span>Сохранить</span>`
