@@ -229,6 +229,7 @@ main > div {
 
 .editor, .article {
 	display: grid;
+	grid-auto-columns: 100%;
 	grid-template-rows: auto 1fr;
 	gap: 1rem;
 }
