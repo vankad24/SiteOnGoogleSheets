@@ -18,9 +18,8 @@ async function display_front_page() {
 	app.front.replaceChildren()
 
 	for (let obj of titles) {
-		const id = obj.id
-		const html = parse(obj.head ?? `<h1>${obj.title}</h1>`)
-		const card = build_card(id, html)
+		const {id, title, head} = obj
+		const card = build_card(id, title, head)
 
 		app.front.append(card)
 	}
@@ -93,12 +92,13 @@ async function display_loading_screen() {
 // ============================================================================
 
 // Карточка для главной страницы
-function build_card(article_id, html_content) {
+function build_card(id, title, head) {
 	const card = document.createElement("div")
+	const html_head = parse(head ?? "")
 
-	card.innerHTML = `<div>${html_content}</div><div class="fade"></div><div class="arrow"><img src="icons/arrow_open.svg"></div>`
+	card.innerHTML = `<div><h1>${title}</h1><div>${html_head}</div></div><div class="fade"></div><div class="arrow"><img src="icons/arrow_open.svg"></div>`
 	card.onclick = function(event) {
-		display_article(article_id)
+		display_article(id)
 	}
 
 	return card
