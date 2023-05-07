@@ -195,8 +195,10 @@ class Sheet:
     def get_column(self, column: str):
         """ Получение данных в столбце по его названию. None, если столбец пуст. Пустые ячейки заполнит None """
         col = column.upper()
-        # return self.__get_data([[col + ":" + col]])[0]
-        return list(map(lambda x: x[0] if x else None, self.__get_data([[col + ":" + col]])[0]))
+        data = self.__get_data([[col + ":" + col]])[0]
+        if data is None:
+            return [None]
+        return list(map(lambda x: x[0] if x else None, data))
 
     def update_row(self, id, *row):
         """Обновление строки в таблице """
