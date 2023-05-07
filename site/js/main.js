@@ -146,6 +146,7 @@ function build_new_post_card() {
 
 	card.innerHTML = `<div><img src="icons/add.svg"><div>Добавить</div></div>`
 	card.onclick = async function(event) {
+		display_loading_screen()
 		const { id } = await sendRequest('add_new_post', {title: "New post"})
 		display_editor(id)
 	}
@@ -201,6 +202,7 @@ function build_post_control_panel(post) {
 		const id = post.id
 
 		if (confirm("Точно удалить?")) {
+			display_loading_screen()
 			const response = await sendRequest('delete_post', { id } )
 			display_front_page()
 		}
