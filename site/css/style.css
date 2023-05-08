@@ -15,6 +15,7 @@ input, button, textarea {
 	box-sizing: border-box;
 	font-size: inherit;
 	display: block;
+	color: inherit;
 }
 
 button {
@@ -71,8 +72,8 @@ p {
 
 .panel {
 	display: grid;
-	grid-template-columns: auto 1fr auto;
-	grid-template-rows: 2rem;
+	grid-auto-flow: column;
+	grid-auto-rows: 2rem;
 
 	max-width: 48rem;
 	margin: 0 auto;
@@ -80,13 +81,18 @@ p {
 	position: relative;
 }
 
-.panel > * {
-	line-height: 2rem;
-}
-
 .logo {
+	place-self: center start;
 	font-size: 20px;
 	cursor: pointer;
+}
+
+.button-strip {
+	place-self: center end;
+}
+
+.button-strip icon {
+	font-size: 2rem;
 }
 
 .button-strip > label {
@@ -95,6 +101,7 @@ p {
 	height: 100%;
 	font-size: 14px;
 	text-align: center;
+	line-height: 2rem;
 }
 
 .button-strip > label > div {
@@ -196,16 +203,15 @@ p {
 	right: 0px;
 }
 
-.front > div > .arrow {
-	font-size: 30px;
+.front .arrow {
 	position: absolute;
-	bottom: 0rem;
-	right: 1.5rem;
+	bottom: 0.5rem;
+	right: 1rem;
 }
 
 .add-card > div {
 	width: 5rem;
-	margin: 3.5rem auto 0rem;
+	margin: 4rem auto 0rem;
 	text-align: center;
 }
 
@@ -293,16 +299,19 @@ p {
 
 .controls button {
 	display: inline;
+
 	background: none;
+	color: inherit;
+
 	border: none;
 	padding: 0rem .5rem;
 	cursor: pointer;
 }
 
-.controls button img {
+.controls button icon {
 	vertical-align: middle;
 	margin: 0rem .2rem;
-	width: 24px;
+	font-weight: 200;
 }
 
 .controls button span {

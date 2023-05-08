@@ -132,7 +132,7 @@ function build_card(id, title, head) {
 	const card = document.createElement("div")
 	const html_head = marked.parse(head ?? "")
 
-	card.innerHTML = `<div><h1>${title}</h1><div>${html_head}</div></div><div class="fade"></div><div class="arrow"><img src="icons/arrow_open.svg"></div>`
+	card.innerHTML = `<div><h1>${title}</h1><div>${html_head}</div></div><div class="fade"></div><icon big class="arrow">arrow_right_alt</icon>`
 	card.onclick = function(event) {
 		display_article(id)
 	}
@@ -144,7 +144,7 @@ function build_card(id, title, head) {
 function build_new_post_card() {
 	const card = document.createElement("div")
 
-	card.innerHTML = `<div><img src="icons/add.svg"><div>Добавить</div></div>`
+	card.innerHTML = `<div><icon big>add</icon><div>Добавить</div></div>`
 	card.onclick = async function(event) {
 		display_loading_screen()
 		const { id } = await sendRequest('add_new_post', {title: "New post"})
@@ -208,10 +208,11 @@ function build_post_control_panel(post) {
 		}
 	}
 
-	unhide.innerHTML = `<img src="icons/visibility.svg"><span>Опубликовать</span>`
-	hide.innerHTML = `<img src="icons/visibility_off.svg"><span>Спрятать</span>`
-	edit.innerHTML = `<img src="icons/edit.svg"><span>Редактировать</span>`
-	del.innerHTML = `<img src="icons/delete.svg"><span>Удалить</span>`
+	unhide.innerHTML = `<icon>visibility</icon><span>Опубликовать</span>`
+
+	hide.innerHTML = `<icon>visibility_off</icon><span>Спрятать</span>`
+	edit.innerHTML = `<icon>edit</icon><span>Редактировать</span>`
+	del.innerHTML = `<icon>delete</icon><span>Удалить</span>`
 
 	return build_panel("Управление", [hide, edit, del])
 }
@@ -227,8 +228,8 @@ function build_editor_control_panel(post, save_fn) {
 
 	save.onclick = save_fn
 
-	abort.innerHTML = `<img src="icons/close.svg"><span>Отмена</span>`
-	save.innerHTML = `<img src="icons/done.svg"><span>Сохранить</span>`
+	abort.innerHTML = `<icon>close</icon><span>Отмена</span>`
+	save.innerHTML = `<icon>done</icon><span>Сохранить</span>`
 
 	return build_panel("Режим редактирования", [abort, save])
 }

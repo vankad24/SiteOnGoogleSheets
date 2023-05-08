@@ -1,0 +1,34 @@
+
+body {
+	background-color: #eee8d5;
+	/* color: #657b83; */
+	color: #203a40;
+}
+
+nav, main > div {
+	background-color: #fdf6e3;
+}
+
+.front > div {
+	background-color: #eee8d5;
+}
+
+.front > div > .fade {
+	background: linear-gradient(180deg, #FFF0 20%, #eee8d5 80%);
+}
+
+.editor textarea, .editor input[type="text"] {
+	border-color: #bcc2c2;
+}
+
+.editor textarea:focus, .editor input[type="text"]:focus {
+	border-color: #268bd2;
+}
+
+.button-strip > label > div + div {
+	background-color: #93a1a1;
+}
+
+.auth-menu {
+	background-color: #93a1a1;
+}

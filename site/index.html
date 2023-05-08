@@ -6,17 +6,18 @@
 	<script src="js/marked/marked.min.js"></script>
 	<script src="js/requests.js"></script>
 	<script src="js/main.js" defer></script>
+	<link rel="stylesheet" href="css/material-symbols/material-symbols.css">
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/day.css">
 	<title>EnglishCheatsheet</title>
 </head>
 <body>
 	<nav>
 		<div class="panel">
 			<div class="logo" onclick="display_front_page()">EnglishCheatsheet</div>
-			<div class="empty"></div>
 			<div class="button-strip">
 				<label for="auth-menu-toggle">
-					<div>Авторизация</div><div><img src="icons/expand_more.svg"></div>
+					<div>Авторизация</div><div><icon>expand_more</icon></div>
 				</label>
 			</div>
 			<input type="checkbox" id="auth-menu-toggle">
@@ -47,7 +48,7 @@
 		</div>
 		<div class="loading_screen">
 			<div>
-				<img src="icons/cycle.svg">
+				<icon big>cycle</icon>
 				<div>Загрузка...</div>
 			</div>
 		</div>
