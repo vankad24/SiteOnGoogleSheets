@@ -10,7 +10,7 @@ class PostRepository:
         self.column_title = "A"
         self.column_content = "B"
         self.column_head = "C"
-        self.head_len = 50
+        self.head_len = 200
 
     def get_column_titles(self):
         """ Получить колонку (массив) заголовков """
